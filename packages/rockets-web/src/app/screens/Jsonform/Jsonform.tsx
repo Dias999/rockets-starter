@@ -1,18 +1,18 @@
 import { FC } from "react";
 import { Text } from "@concepta/react-material-ui";
 import Container from "@mui/material/Container";
-import Divider from "@mui/material/Divider";
+// import Divider from "@mui/material/Divider";
 import ScreenWithContainer from "app/components/ScreenWithContainer";
-import ArrayForm from "./ArrayForm";
-import ArrayMultiForm from "./ArrayMultiForm";
+// import ArrayForm from "./ArrayForm";
+// import ArrayMultiForm from "./ArrayMultiForm";
 import SimpleForm from "./SimpleForm";
-import OtherFormElements from "./OtherFormElements";
-import SwitchElementForm from "./SwitchElementForm";
+// import OtherFormElements from "./OtherFormElements";
+// import SwitchElementForm from "./SwitchElementForm";
 
 const Jsonform: FC = () => (
   <ScreenWithContainer currentId="jsonform">
-    <Container maxWidth="xs">
-      <Text
+    <Container maxWidth="md">
+      {/* <Text
         variant="h4"
         fontFamily="Inter"
         fontSize={30}
@@ -21,11 +21,11 @@ const Jsonform: FC = () => (
         gutterBottom
       >
         Forms
-      </Text>
+      </Text> */}
 
       <SimpleForm />
 
-      <Divider sx={{ my: 8 }} />
+      {/* <Divider sx={{ my: 8 }} />
 
       <ArrayForm />
 
@@ -39,7 +39,7 @@ const Jsonform: FC = () => (
 
       <ArrayForm />
 
-      <ArrayMultiForm />
+      <ArrayMultiForm /> */}
     </Container>
   </ScreenWithContainer>
 );
