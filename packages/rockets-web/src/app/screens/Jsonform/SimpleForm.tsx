@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { RJSFSchema, UiSchema, FormValidation } from "@rjsf/utils";
@@ -95,15 +95,15 @@ const SimpleForm: FC = () => {
           },
         },
       },
+      sameAsCheckIn: {
+        type: "boolean",
+        title: "Same as Check In",
+        enum: [true, false],
+      },
       locationReturn: {
         title: "",
         type: "object",
         properties: {
-          sameAsCheckIn: {
-            type: "boolean",
-            title: "Same as Check In",
-            enum: [true, false],
-          },
           location: {
             type: "string",
             title: "",
@@ -222,8 +222,76 @@ const SimpleForm: FC = () => {
     console.log("nativeEvent", nativeEvent);
   };
 
+  const [formData, setFormData] = useState<any>(undefined);
+
   const handleChange = (data: IChangeEvent) => {
-    console.log("form", data?.formData);
+    let newFormData = { ...data?.formData };
+
+    if (newFormData?.sameAsCheckIn && !formData?.sameAsCheckIn) {
+      newFormData["locationReturn"] = newFormData["location"];
+    }
+
+    if (newFormData?.sameAsCheckIn && formData?.sameAsCheckIn) {
+      let sameDeliveryData = true;
+      let sameDeliveryReturnData = true;
+
+      // check is delivery location has changed
+      if (newFormData?.location?.location !== formData?.location?.location) {
+        sameDeliveryData = false;
+      }
+      if (
+        newFormData?.location?.deliveryLocation !==
+        formData?.location?.deliveryLocation
+      ) {
+        sameDeliveryData = false;
+      }
+      if (
+        newFormData?.location?.scheduling.date !==
+        formData?.location?.scheduling.date
+      ) {
+        sameDeliveryData = false;
+      }
+      if (
+        newFormData?.location?.scheduling.time !==
+        formData?.location?.scheduling.time
+      ) {
+        sameDeliveryData = false;
+      }
+
+      // check is return location has changed
+      if (
+        newFormData?.locationReturn?.location !==
+        formData?.locationReturn?.location
+      ) {
+        sameDeliveryReturnData = false;
+      }
+      if (
+        newFormData?.locationReturn?.deliveryLocation !==
+        formData?.locationReturn?.deliveryLocation
+      ) {
+        sameDeliveryReturnData = false;
+      }
+      if (
+        newFormData?.locationReturn?.scheduling.date !==
+        formData?.locationReturn?.scheduling.date
+      ) {
+        sameDeliveryReturnData = false;
+      }
+      if (
+        newFormData?.locationReturn?.scheduling.time !==
+        formData?.locationReturn?.scheduling.time
+      ) {
+        sameDeliveryReturnData = false;
+      }
+
+      console.log(sameDeliveryData, sameDeliveryReturnData);
+
+      if (!sameDeliveryData || !sameDeliveryReturnData) {
+        newFormData.sameAsCheckIn = false;
+      }
+    }
+
+    setFormData(newFormData);
   };
 
   return (
@@ -239,6 +307,7 @@ const SimpleForm: FC = () => {
           showErrorList={false}
           onError={(err) => console.log("errors", err)}
           onChange={handleChange}
+          formData={formData}
         >
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
             Continue
